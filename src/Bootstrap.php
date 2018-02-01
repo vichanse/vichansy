@@ -13,10 +13,42 @@ require ROOT_DIR . '/vendor/autoload.php';
 
 $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
 
-$controller = new \Vichansy\FrontPage\Presentation\FrontPageController();
+$dispatcher = \FastRoute\simpleDispatcher(
+    function (\FastRoute\RouteCollector $r) {
+        $routes = include(ROOT_DIR . '/src/Route.php');
+        foreach ($routes as $route) {
+            $r->addRoute(...$route);
+        }
+    }
 
-$response = $controller->show($request);
+);
 
+$routerInfo = $dispatcher->dispatch(
+    $request->getMethod(),
+    $request->getPathInfo()
+);
+
+switch ($routerInfo[0]) {
+    case \FastRoute\Dispatcher::NOT_FOUND:
+        $response = new \Symfony\Component\HttpFoundation\Response(
+            'Not found',
+            404
+        );
+        break;
+    case \FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
+        $response = new \Symfony\Component\HttpFoundation\Response(
+            'Method not allowed',
+            405
+        );
+        break;
+    case \FastRoute\Dispatcher::FOUND:
+        [$controllerName, $method] = explode('#', $routerInfo[1]);
+        $vars = $routerInfo[2];
+
+        $controller = new $controllerName;
+        $response = $controller->$method($request, $vars);
+        break;
+}
 if(!$response instanceof \Symfony\Component\HttpFoundation\Response) {
     throw new \Exception('Controller method must return a Response object');
 }
