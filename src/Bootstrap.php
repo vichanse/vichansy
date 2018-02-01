@@ -1,22 +1,23 @@
 <?php declare(strict_types=1);
 
-use Tracy\Debugger;
+/*use Tracy\Debugger;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Vichansy\FrontPage\Presentation\FrontPageController;
+use Vichansy\FrontPage\Presentation\FrontPageController;*/
 
 define('ROOT_DIR', dirname(__DIR__));
 
 require ROOT_DIR . '/vendor/autoload.php';
 
-Debugger::enable(Debugger::DEVELOPMENT);
+\Tracy\Debugger::enable();
 
-$request = Request::createFromGlobals();
+$request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
 
-$controller = new FrontPageController();
+$controller = new \Vichansy\FrontPage\Presentation\FrontPageController();
+
 $response = $controller->show($request);
 
-if(!$response instanceof Response) {
+if(!$response instanceof \Symfony\Component\HttpFoundation\Response) {
     throw new \Exception('Controller method must return a Response object');
 }
 
