@@ -10,6 +10,8 @@ use Auryn\Injector;
 use Vichansy\Framework\Rendering\TemplateRenderer;
 use Vichansy\Framework\Rendering\TwigTemplateRendererFactory;
 use Vichansy\Framework\Rendering\TemplateDirectory;
+use Vichansy\FrontPage\Application\SubmissionsQuery;
+use Vichansy\FrontPage\Infrastructure\MockSubmissionsQuery;
 
 $injector = new Injector();
 
@@ -24,4 +26,6 @@ $injector->delegate(
 
 $injector->define(TemplateDirectory::class, [':rootDirectory' => ROOT_DIR]);
 
+$injector->alias(SubmissionsQuery::class, MockSubmissionsQuery::class);
+$injector->share(SubmissionsQuery::class);
 return $injector;
