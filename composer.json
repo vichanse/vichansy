@@ -4,7 +4,8 @@
         "tracy/tracy": "^2.4",
         "symfony/http-foundation": "^4.0",
         "nikic/fast-route": "^1.2",
-        "twig/twig": "^2.4"
+        "twig/twig": "^2.4",
+        "rdlowrey/auryn": "^1.4"
     },
     "autoload": {
         "psr-4": {
