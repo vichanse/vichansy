@@ -8,15 +8,15 @@ use Vichansy\Framework\Rendering\TemplateRenderer;
 
 final class FrontPageController
 {
-    private $tempalteRenderer;
+    private $templateRenderer;
 
     public function __construct(TemplateRenderer $templateRenderer)
     {
-        $this->tempalteRenderer = $templateRenderer;
+        $this->templateRenderer = $templateRenderer;
     }
     public function show(Request $request): Response
     {
-        $content = 'Hello, ' . $request->get('name', 'visitor');
+        $content = $this->templateRenderer->render('FrontPage.html.twig');
         return new Response($content);
     }
 }

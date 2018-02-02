@@ -9,7 +9,7 @@ define('ROOT_DIR', dirname(__DIR__));
 
 require ROOT_DIR . '/vendor/autoload.php';
 
-\Tracy\Debugger::enable();
+\Tracy\Debugger::enable(\Tracy\Debugger::DEVELOPMENT);
 
 $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
 

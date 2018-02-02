@@ -9,15 +9,19 @@
 use Auryn\Injector;
 use Vichansy\Framework\Rendering\TemplateRenderer;
 use Vichansy\Framework\Rendering\TwigTemplateRendererFactory;
+use Vichansy\Framework\Rendering\TemplateDirectory;
 
 $injector = new Injector();
+
+
 
 $injector->delegate(
     TemplateRenderer::class,
     function () use ($injector): TemplateRenderer {
         $factory = $injector->make(TwigTemplateRendererFactory::class);
-        return $factory->create();
-    }
+        return $factory->create(); }
 );
+
+$injector->define(TemplateDirectory::class, [':rootDirectory' => ROOT_DIR]);
 
 return $injector;
