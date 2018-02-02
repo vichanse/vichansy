@@ -45,9 +45,8 @@ switch ($routerInfo[0]) {
         [$controllerName, $method] = explode('#', $routerInfo[1]);
         $vars = $routerInfo[2];
 
-        $factory = new Vichansy\Framework\Rendering\TwigTemplateRendererFactory();
-        $templateRenderer = $factory->create();
-        $controller = new $controllerName($templateRenderer);
+        $injector = include('Dependencies.php');
+        $controller = $injector->make($controllerName);
         $response = $controller->$method($request, $vars);
         break;
 }
