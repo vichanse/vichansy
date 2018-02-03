@@ -12,6 +12,9 @@ use Vichansy\Framework\Rendering\TwigTemplateRendererFactory;
 use Vichansy\Framework\Rendering\TemplateDirectory;
 use Vichansy\FrontPage\Application\SubmissionsQuery;
 use Vichansy\FrontPage\Infrastructure\MockSubmissionsQuery;
+use Doctrine\DBAL\Connection;
+use Vichansy\Framework\Dbal\ConnectionFactory;
+use Vichansy\Framework\Dbal\DatabaseUrl;
 
 $injector = new Injector();
 
@@ -28,4 +31,15 @@ $injector->define(TemplateDirectory::class, [':rootDirectory' => ROOT_DIR]);
 
 $injector->alias(SubmissionsQuery::class, MockSubmissionsQuery::class);
 $injector->share(SubmissionsQuery::class);
+
+//DB
+$injector->define(
+    DatabaseUrl::class,
+    [':url' => 'sqlite:///' . ROOT_DIR . '/storage/db.sqlite3']
+);
+
+$injector->delegate(Connection::class, function () use ($injector): Connection {
+    $factory = $injector->make(ConnectionFactory::class);
+    return $factory->create();
+});
 return $injector;
