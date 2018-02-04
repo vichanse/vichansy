@@ -42,4 +42,6 @@ $injector->delegate(Connection::class, function () use ($injector): Connection {
     $factory = $injector->make(ConnectionFactory::class);
     return $factory->create();
 });
+
+$injector->share(Connection::class);
 return $injector;
