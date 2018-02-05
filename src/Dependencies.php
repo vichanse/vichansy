@@ -16,6 +16,11 @@ use Doctrine\DBAL\Connection;
 use Vichansy\Framework\Dbal\ConnectionFactory;
 use Vichansy\Framework\Dbal\DatabaseUrl;
 use Vichansy\FrontPage\Infrastructure\DbalSubmissionQuery;
+use Vichansy\Framework\Csrf\TokenStorage;
+use Vichansy\Framework\Csrf\SymfonySessionTokenStorage;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
+
 $injector = new Injector();
 
 
@@ -45,4 +50,9 @@ $injector->delegate(Connection::class, function () use ($injector): Connection {
 });
 
 $injector->share(Connection::class);
+
+//CSRF & Session
+$injector->alias(TokenStorage::class, SymfonySessionTokenStorage::class);
+$injector->alias(SessionInterface::class, Session::class);
+
 return $injector;

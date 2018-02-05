@@ -16,5 +16,10 @@ return [
         '/submit',
         'Vichansy\Submission\Presentation\SubmissionController#show'
     ],
+    [
+        'POST',
+        '/submit',
+        'Vichansy\Submission\Presentation\SubmissionController#submit'
+    ],
 ];
 
