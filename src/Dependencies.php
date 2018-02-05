@@ -11,11 +11,11 @@ use Vichansy\Framework\Rendering\TemplateRenderer;
 use Vichansy\Framework\Rendering\TwigTemplateRendererFactory;
 use Vichansy\Framework\Rendering\TemplateDirectory;
 use Vichansy\FrontPage\Application\SubmissionsQuery;
-use Vichansy\FrontPage\Infrastructure\MockSubmissionsQuery;
+//use Vichansy\FrontPage\Infrastructure\MockSubmissionsQuery;
 use Doctrine\DBAL\Connection;
 use Vichansy\Framework\Dbal\ConnectionFactory;
 use Vichansy\Framework\Dbal\DatabaseUrl;
-
+use Vichansy\FrontPage\Infrastructure\DbalSubmissionQuery;
 $injector = new Injector();
 
 
@@ -29,7 +29,8 @@ $injector->delegate(
 
 $injector->define(TemplateDirectory::class, [':rootDirectory' => ROOT_DIR]);
 
-$injector->alias(SubmissionsQuery::class, MockSubmissionsQuery::class);
+//$injector->alias(SubmissionsQuery::class, MockSubmissionsQuery::class);
+$injector->alias(SubmissionsQuery::class, DbalSubmissionQuery::class);
 $injector->share(SubmissionsQuery::class);
 
 //DB
