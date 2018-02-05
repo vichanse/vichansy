@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-
+//phpinfo();die;
 
 
 ini_set('display_errors', '1');
