@@ -5,15 +5,22 @@ namespace Vichansy\Submission\Presentation;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Vichansy\Framework\Csrf\StoredTokenValidator;
 use Vichansy\Framework\Rendering\TemplateRenderer;
+
 
 final class SubmissionController
 {
     private $templateRenderer;
+    private $storedTokenValidator;
 
-    public function __construct(TemplateRenderer $templateRenderer)
+    public function __construct(
+        TemplateRenderer $templateRenderer,
+        StoredTokenValidator $storedTokenValidator
+    )
     {
         $this->templateRenderer = $templateRenderer;
+        $this->storedTokenValidator = $storedTokenValidator;
     }
 
     public function show(): Response
