@@ -10,22 +10,27 @@ use Vichansy\Framework\Rendering\TemplateRenderer;
 use Vichansy\Framework\Csrf\Token;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Vichansy\Submission\Application\SubmitLink;
+use Vichansy\Submission\Application\SubmitLinkHandler;
 
 final class SubmissionController
 {
     private $templateRenderer;
     private $storedTokenValidator;
     private $session;
+    private $submitHandler;
 
     public function __construct(
         TemplateRenderer $templateRenderer,
         StoredTokenValidator $storedTokenValidator,
-        Session $session
+        Session $session,
+        SubmitLinkHandler $submitLinkHandler
     )
     {
         $this->templateRenderer = $templateRenderer;
         $this->storedTokenValidator = $storedTokenValidator;
         $this->session = $session;
+        $this->submitLinkHandler = $submitLinkHandler;
     }
 
     public function show(): Response
@@ -46,7 +51,10 @@ final class SubmissionController
             return $response;
         }
 
-        // save the submission ...
+        $this->submitLinkHandler->handle(new SubmitLink(
+            $request->get('url'),
+            $request->get('title')
+        ));
 
         $this->session->getFlashBag()->add(
             'success',
