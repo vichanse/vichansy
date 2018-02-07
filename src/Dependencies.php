@@ -20,6 +20,8 @@ use Vichansy\Framework\Csrf\TokenStorage;
 use Vichansy\Framework\Csrf\SymfonySessionTokenStorage;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Vichansy\Submission\Domain\SubmissionRepository;
+use Vichansy\Submission\Infrastructure\DbalSubmissionRepository;
 
 $injector = new Injector();
 
@@ -54,5 +56,6 @@ $injector->share(Connection::class);
 //CSRF & Session
 $injector->alias(TokenStorage::class, SymfonySessionTokenStorage::class);
 $injector->alias(SessionInterface::class, Session::class);
+$injector->alias(SubmissionRepository::class, DbalSubmissionRepository::class);
 
 return $injector;

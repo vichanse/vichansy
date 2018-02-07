@@ -41,7 +41,7 @@ final class SubmissionController
 
     public function submit(Request $request): Response
     {
-        $response = new RedirectResponse('/submit');
+        $response = new RedirectResponse('/');
 
         if (!$this->storedTokenValidator->validate(
             'submission',

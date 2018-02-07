@@ -9,7 +9,7 @@
 namespace Vichansy\Submission\Application;
 
 use Vichansy\Submission\Domain\SubmissionRepository;
-use Vichansy\FrontPage\Application\Submission;
+use Vichansy\Submission\Domain\Submission;
 
 
 final class SubmitLinkHandler
