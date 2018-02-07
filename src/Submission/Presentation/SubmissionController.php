@@ -5,30 +5,27 @@ namespace Vichansy\Submission\Presentation;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Vichansy\Framework\Csrf\StoredTokenValidator;
 use Vichansy\Framework\Rendering\TemplateRenderer;
-use Vichansy\Framework\Csrf\Token;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
-use Vichansy\Submission\Application\SubmitLink;
 use Vichansy\Submission\Application\SubmitLinkHandler;
 
 final class SubmissionController
 {
     private $templateRenderer;
-    private $storedTokenValidator;
+    private $submissionFormFactory;
     private $session;
-    private $submitHandler;
+    private $submitLinkHandler;
 
     public function __construct(
         TemplateRenderer $templateRenderer,
-        StoredTokenValidator $storedTokenValidator,
+        SubmissionFormFactory $submissionFormFactory,
         Session $session,
         SubmitLinkHandler $submitLinkHandler
     )
     {
         $this->templateRenderer = $templateRenderer;
-        $this->storedTokenValidator = $storedTokenValidator;
+        $this->submissionFormFactory = $submissionFormFactory;
         $this->session = $session;
         $this->submitLinkHandler = $submitLinkHandler;
     }
@@ -41,21 +38,16 @@ final class SubmissionController
 
     public function submit(Request $request): Response
     {
-        $response = new RedirectResponse('/');
+        $response = new RedirectResponse('/submit');
 
-        if (!$this->storedTokenValidator->validate(
-            'submission',
-            new Token((string)$request->get('token'))
-        )) {
-            $this->session->getFlashBag()->add('errors', 'Invalid token');
+        $form = $this->submissionFormFactory->createFromRequest($request);
+        if ($form->hasValidationErrors()) {
+            foreach ($form->getValidationErrors() as $errorMessage) {
+                $this->session->getFlashBag()->add('errors', $errorMessage);
+            }
             return $response;
         }
-
-        $this->submitLinkHandler->handle(new SubmitLink(
-            $request->get('url'),
-            $request->get('title')
-        ));
-
+        $this->submitLinkHandler->handle($form->toCommand());
         $this->session->getFlashBag()->add(
             'success',
             'Your URL was submitted successfully'
