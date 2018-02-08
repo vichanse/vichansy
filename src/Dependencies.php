@@ -22,6 +22,10 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Vichansy\Submission\Domain\SubmissionRepository;
 use Vichansy\Submission\Infrastructure\DbalSubmissionRepository;
+use Vichansy\User\Domain\UserRepository;
+use Vichansy\User\Infrastructure\DbalUserRepository;
+use Vichansy\User\Application\NicknameTakenQuery;
+use Vichansy\User\Infrastructure\DbalNicknameTakenQuery;
 
 $injector = new Injector();
 
@@ -57,5 +61,9 @@ $injector->share(Connection::class);
 $injector->alias(TokenStorage::class, SymfonySessionTokenStorage::class);
 $injector->alias(SessionInterface::class, Session::class);
 $injector->alias(SubmissionRepository::class, DbalSubmissionRepository::class);
+
+//User
+$injector->alias(UserRepository::class, DbalUserRepository::class);
+$injector->alias(NicknameTakenQuery::class, DbalNicknameTakenQuery::class);
 
 return $injector;

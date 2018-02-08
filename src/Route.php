@@ -21,5 +21,15 @@ return [
         '/submit',
         'Vichansy\Submission\Presentation\SubmissionController#submit'
     ],
+    [
+        'GET',
+        '/register',
+        'Vichansy\User\Presentation\RegistrationController#show'
+    ],
+    [
+        'POST',
+        '/register',
+        'Vichansy\User\Presentation\RegistrationController#register'
+    ],
 ];
 
