@@ -1,4 +1,5 @@
 <?php declare(strict_types=1);
+
 /**
  * Created by PhpStorm.
  * User: vichanse
@@ -26,16 +27,19 @@ use Vichansy\User\Domain\UserRepository;
 use Vichansy\User\Infrastructure\DbalUserRepository;
 use Vichansy\User\Application\NicknameTakenQuery;
 use Vichansy\User\Infrastructure\DbalNicknameTakenQuery;
+use Vichansy\Framework\Rbac\User;
+use Vichansy\Framework\Rbac\SymfonySessionCurrentUserFactory;
 
 $injector = new Injector();
-
 
 
 $injector->delegate(
     TemplateRenderer::class,
     function () use ($injector): TemplateRenderer {
         $factory = $injector->make(TwigTemplateRendererFactory::class);
-        return $factory->create(); }
+
+        return $factory->create();
+    }
 );
 
 $injector->define(TemplateDirectory::class, [':rootDirectory' => ROOT_DIR]);
@@ -47,13 +51,17 @@ $injector->share(SubmissionsQuery::class);
 //DB
 $injector->define(
     DatabaseUrl::class,
-    [':url' => 'sqlite:///' . ROOT_DIR . '/storage/db.sqlite3']
+    [':url' => 'sqlite:///'.ROOT_DIR.'/storage/db.sqlite3']
 );
 
-$injector->delegate(Connection::class, function () use ($injector): Connection {
-    $factory = $injector->make(ConnectionFactory::class);
-    return $factory->create();
-});
+$injector->delegate(
+    Connection::class,
+    function () use ($injector): Connection {
+        $factory = $injector->make(ConnectionFactory::class);
+
+        return $factory->create();
+    }
+);
 
 $injector->share(Connection::class);
 
@@ -65,5 +73,15 @@ $injector->alias(SubmissionRepository::class, DbalSubmissionRepository::class);
 //User
 $injector->alias(UserRepository::class, DbalUserRepository::class);
 $injector->alias(NicknameTakenQuery::class, DbalNicknameTakenQuery::class);
+
+//Authorization
+$injector->delegate(
+    User::class,
+    function () use ($injector): User {
+        $factory = $injector->make(SymfonySessionCurrentUserFactory::class);
+
+        return $factory->create();
+    }
+);
 
 return $injector;
