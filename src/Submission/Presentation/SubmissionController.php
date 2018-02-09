@@ -5,6 +5,7 @@ namespace Vichansy\Submission\Presentation;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Vichansy\Framework\Rbac\AuthenticatedUser;
 use Vichansy\Framework\Rbac\User;
 use Vichansy\Framework\Rendering\TemplateRenderer;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -69,7 +70,11 @@ final class SubmissionController
 
             return $response;
         }
-        $this->submitLinkHandler->handle($form->toCommand());
+
+        if (!$this->user instanceof AuthenticatedUser) {
+            throw new \LogicException('Only authenticated users can submit links');
+        }
+        $this->submitLinkHandler->handle($form->toCommand($this->user));
         $this->session->getFlashBag()->add(
             'success',
             'Your URL was submitted successfully'

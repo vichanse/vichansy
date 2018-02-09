@@ -10,6 +10,7 @@ namespace Vichansy\Submission\Presentation;
 
 use Vichansy\Framework\Csrf\StoredTokenValidator;
 use Vichansy\Framework\Csrf\Token;
+use Vichansy\Framework\Rbac\AuthenticatedUser;
 use Vichansy\Submission\Application\SubmitLink;
 
 final class SubmissionForm
@@ -56,8 +57,8 @@ final class SubmissionForm
         return (count($this->getValidationErrors()) > 0);
     }
 
-    public function toCommand(): SubmitLink
+    public function toCommand(AuthenticatedUser $author): SubmitLink
     {
-        return new SubmitLink($this->url, $this->title);
+        return new SubmitLink($author->getId(),$this->url, $this->title);
     }
 }

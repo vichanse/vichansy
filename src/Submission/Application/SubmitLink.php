@@ -8,16 +8,27 @@
 
 namespace Vichansy\Submission\Application;
 
+use Ramsey\Uuid\UuidInterface;
 
 final class SubmitLink
 {
     private $url;
     private $title;
+    private $authorId;
 
-    public function __construct(string $url, string $title)
-    {
+    public function __construct(
+        UuidInterface $auhorId,
+        string $url,
+        string $title
+    ) {
         $this->url = $url;
         $this->title = $title;
+        $this->authorId = $auhorId;
+    }
+
+    public function getAuthorId(): UuidInterface
+    {
+        return $this->authorId;
     }
 
     public function getUrl(): string
