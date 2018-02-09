@@ -15,7 +15,7 @@ $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
 
 $dispatcher = \FastRoute\simpleDispatcher(
     function (\FastRoute\RouteCollector $r) {
-        $routes = include(ROOT_DIR . '/src/Route.php');
+        $routes = include(ROOT_DIR . '/src/Routes.php');
         foreach ($routes as $route) {
             $r->addRoute(...$route);
         }

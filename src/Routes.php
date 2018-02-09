@@ -31,5 +31,15 @@ return [
         '/register',
         'Vichansy\User\Presentation\RegistrationController#register'
     ],
+    [
+        'GET',
+        '/login',
+        'Vichansy\User\Presentation\LoginController#show'
+    ],
+    [
+        'POST',
+        '/login',
+        'Vichansy\User\Presentation\LoginController#logIn'
+    ],
 ];
 
